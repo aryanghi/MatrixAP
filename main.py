@@ -62,23 +62,42 @@ class Matrix:
 
 
   def __add__(self,othermatrix):
-    assert self._rows==othermatrix._rows and\
-    self._cols==othermatrix._cols,\
-    "Matrix sizes are not consistent for addition operation!"
-    for i in range(self._rows):
-        for j in range(self._cols):
-            if type(self(i+1,j+1))==np.float64:
-                val=float
-    for i in range(self._rows):
-        for j in range(self._cols):
-            if type(othermatrix(i+1,j+1))==np.float64:
-                val=float
+    if type(othermatrix)==Matrix:
+        assert self._rows == othermatrix._rows and \
+               self._cols == othermatrix._cols, \
+            "Matrix sizes are not consistent for addition operation!"
+        for i in range(self._rows):
+            for j in range(self._cols):
+                if type(self(i + 1, j + 1)) == np.float64:
+                    val = float
+        for i in range(self._rows):
+            for j in range(self._cols):
+                if type(othermatrix(i + 1, j + 1)) == np.float64:
+                    val = float
 
-    newmatrix=Matrix(self._rows,self._cols,typ=val)
-    for r in range(self._rows):
-      for c in range(self._cols):
-        newmatrix._data[r][c]=self._data[r][c]+othermatrix._data[r][c]
-    return newmatrix
+        newmatrix = Matrix(self._rows, self._cols, typ=val)
+        for r in range(self._rows):
+            for c in range(self._cols):
+                newmatrix._data[r][c] = self._data[r][c] + othermatrix._data[r][c]
+        return newmatrix
+    elif type(othermatrix)==int or type(othermatrix)==float:
+        val = int
+        if type(othermatrix) == int:
+            for i in range(self._rows):
+                for j in range(self._cols):
+                    if type(self(i + 1, j + 1)) == np.float64:
+                        val = float
+        else:
+            val = float
+
+        newmat = Matrix(self._rows, self._cols, typ=val)
+        for i in range(self._rows):
+            for j in range(self._cols):
+                newmat[(i, j)] = othermatrix + self(i, j)
+        return newmat
+    else:
+        assert False, "syntax error"
+
 
 
   def __sub__(self,othermatrix):
