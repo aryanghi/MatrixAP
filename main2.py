@@ -104,18 +104,36 @@ class mat:
 
 
     def __add__(self, other):
-        assert self.get_dim() == other.get_dim(), 'error'
-        for i in range(self.get_dim()):
-            assert self.lenght(i + 1) == other.lenght(i + 1), 'error'
+        if type(other)==mat:
+            assert self.get_dim() == other.get_dim(), 'error'
+            for i in range(self.get_dim()):
+                assert self.lenght(i + 1) == other.lenght(i + 1), 'error'
 
-        if self.get_type() == int and other.get_type() == int:
-            newmat = mat(self._dim)
+            if self.get_type() == int and other.get_type() == int:
+                newmat = mat(self._dim)
+            else:
+                newmat = mat(self._dim, typ=float)
+            for i in range(self._size):
+                newmat._data[i] = self._data[i] + other._data[i]
+            return newmat
+        elif type(other)==float or type(other)==int:
+            val = int
+            if type(other) == int:
+                for i in range(self._size):
+                    if type(self._data[i]) == float:
+                        val = float
+            else:
+                val = float
+            newmat = mat(self._dim, typ=val)
+            for i in range(self._size):
+                newmat._data[i] = other + self._data[i]
+            return newmat
         else:
-            newmat = mat(self._dim, typ=float)
-        for i in range(self._size):
-            newmat._data[i] = self._data[i] + other._data[i]
-        return newmat
+            assert False,"syntax error"
 
+
+    def __sub__(self, other):
+        pass
 
 
     def __mul__(self, other):
@@ -146,6 +164,8 @@ class mat:
             for i in range(self._size):
                 newmat._data[i] = other * self._data[i]
             return newmat
+        else:
+            assert False,"syntax error"
 
 
     def __truediv__(self, othermatrix):
@@ -417,5 +437,7 @@ def inv(mat):
 
 def transpose(mat):
     pass
+
+
 
 
