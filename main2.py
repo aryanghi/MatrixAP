@@ -194,12 +194,31 @@ class mat:
 
 
     def __truediv__(self, othermatrix):
-        pass
+        if type(othermatrix)==mat:
+            newmat=inv(othermatrix)
+            return self * newmat
+        elif type(othermatrix) == int or type(othermatrix) == float:
+            val = int
+            if type(othermatrix) == int:
+                for i in range(self._size):
+                    if type(self._data[i]) == float:
+                        val = float
+            else:
+                val = float
+            newmat = mat(self._dim, typ=val)
+            for i in range(self._size):
+                newmat._data[i] = othermatrix / self._data[i]
+            return newmat
+        else:
+            assert False,"syntax error"
+
 
 
 
     def __floordiv__(self, othermatrix):
-        pass
+        assert type(othermatrix) == mat, "erorr"
+        newmat = inv(self)
+        return newmat * othermatrix
 
 
 
@@ -485,28 +504,36 @@ def inv(matrix):
     det_matrix = det(matrix)
     assert det_matrix != 0, "Matrix is singular, and its inverse does not exist."
 
-    # Calculate the inverse using Gauss-Jordan elimination
-    inv_matrix = mat(args=(matrix.lenght(1), matrix.lenght(2)), typ=matrix.get_type())
-
+    # Create an augmented matrix [matrix | identity]
+    augmented_matrix = mat(args=(matrix.lenght(1), 2 * matrix.lenght(2)), typ=matrix.get_type())
     for i in range(1, matrix.lenght(1) + 1):
         for j in range(1, matrix.lenght(2) + 1):
-            minor_matrix = mat(args=(matrix.lenght(1) - 1, matrix.lenght(2) - 1), typ=matrix.get_type())
-            minor_row, minor_col = 1, 1
+            augmented_matrix[(i, j)] = matrix[(i, j)]
+            augmented_matrix[(i, j + matrix.lenght(2))] = 1 if i == j else 0
 
-            for x in range(1, matrix.lenght(1) + 1):
-                if x == i:
-                    continue
-                for y in range(1, matrix.lenght(2) + 1):
-                    if y == j:
-                        continue
-                    minor_matrix[(minor_row, minor_col)] = matrix[(x, y)]
-                    minor_col += 1
-                minor_row += 1
-                minor_col = 1
+    # Apply Gauss-Jordan elimination
+    for col in range(1, matrix.lenght(2) + 1):
+        for row in range(1, matrix.lenght(1) + 1):
+            if row != col:
+                ratio = augmented_matrix[(row, col)] / augmented_matrix[(col, col)]
+                for k in range(1, 2 * matrix.lenght(2) + 1):
+                    augmented_matrix[(row, k)] -= ratio * augmented_matrix[(col, k)]
 
-            inv_matrix[(j, i)] = det(minor_matrix) / det_matrix
+    # Scale the rows to make the diagonal elements 1
+    for i in range(1, matrix.lenght(1) + 1):
+        scaling_factor = 1 / augmented_matrix[(i, i)]
+        for j in range(1, 2 * matrix.lenght(2) + 1):
+            augmented_matrix[(i, j)] *= scaling_factor
+
+    # Extract the inverse matrix from the augmented matrix
+    inv_matrix = mat(args=(matrix.lenght(1), matrix.lenght(2)), typ=matrix.get_type())
+    for i in range(1, matrix.lenght(1) + 1):
+        for j in range(1, matrix.lenght(2) + 1):
+            inv_matrix[(i, j)] = augmented_matrix[(i, j + matrix.lenght(2))]
 
     return inv_matrix
+
+
 
 
 
@@ -526,5 +553,11 @@ def transpose(matrix):
 
 
 
+A=mat()
+B=mat()
+A=A([[2,5],[8,9]])
+B=B([[6,0],[2,1]])
+print(A)
+print(A/B)
 
 
