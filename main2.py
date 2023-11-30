@@ -133,7 +133,32 @@ class mat:
 
 
     def __sub__(self, other):
-        pass
+        if type(other)==mat:
+            assert self.get_dim() == other.get_dim(), 'error'
+            for i in range(self.get_dim()):
+                assert self.lenght(i + 1) == other.lenght(i + 1), 'error'
+
+            if self.get_type() == int and other.get_type() == int:
+                newmat = mat(self._dim)
+            else:
+                newmat = mat(self._dim, typ=float)
+            for i in range(self._size):
+                newmat._data[i] = self._data[i] - other._data[i]
+            return newmat
+        elif type(other)==float or type(other)==int:
+            val = int
+            if type(other) == int:
+                for i in range(self._size):
+                    if type(self._data[i]) == float:
+                        val = float
+            else:
+                val = float
+            newmat = mat(self._dim, typ=val)
+            for i in range(self._size):
+                newmat._data[i] = other - self._data[i]
+            return newmat
+        else:
+            assert False,"syntax error"
 
 
     def __mul__(self, other):
@@ -427,16 +452,78 @@ def pinv():
     pass
 
 
-def det(mat):
-    pass
+def det(matrix):
+    assert matrix.get_dim() == 2, "matrix must be square"
+    assert matrix.lenght(1)==matrix.lenght(2), "matrix must be square"
+
+    if matrix.lenght(1) == 2 and matrix.lenght(2) == 2:
+        return matrix[(1, 1)] * matrix[(2, 2)] - matrix[(1, 2)] * matrix[(2, 1)]
+
+    determinant = 0
+    for col in range(1, matrix.lenght(2) + 1):
+        minor_matrix = mat(args=(matrix.lenght(1) - 1, matrix.lenght(2) - 1), typ=matrix.get_type())
+        minor_row = 1
+        for i in range(2, matrix.lenght(1) + 1):
+            minor_col = 1
+            for j in range(1, matrix.lenght(2) + 1):
+                if j == col:
+                    continue
+                minor_matrix[(minor_row, minor_col)] = matrix[(i, j)]
+                minor_col += 1
+            minor_row += 1
+        determinant += ((-1) ** (col - 1)) * matrix[(1, col)] * det(minor_matrix)
+
+    return determinant
 
 
-def inv(mat):
-    pass
 
 
-def transpose(mat):
-    pass
+
+def inv(matrix):
+    assert matrix.get_dim() == 2, "Inverse function currently supports only 2x2 matrices."
+
+    det_matrix = det(matrix)
+    assert det_matrix != 0, "Matrix is singular, and its inverse does not exist."
+
+    # Calculate the inverse using Gauss-Jordan elimination
+    inv_matrix = mat(args=(matrix.lenght(1), matrix.lenght(2)), typ=matrix.get_type())
+
+    for i in range(1, matrix.lenght(1) + 1):
+        for j in range(1, matrix.lenght(2) + 1):
+            minor_matrix = mat(args=(matrix.lenght(1) - 1, matrix.lenght(2) - 1), typ=matrix.get_type())
+            minor_row, minor_col = 1, 1
+
+            for x in range(1, matrix.lenght(1) + 1):
+                if x == i:
+                    continue
+                for y in range(1, matrix.lenght(2) + 1):
+                    if y == j:
+                        continue
+                    minor_matrix[(minor_row, minor_col)] = matrix[(x, y)]
+                    minor_col += 1
+                minor_row += 1
+                minor_col = 1
+
+            inv_matrix[(j, i)] = det(minor_matrix) / det_matrix
+
+    return inv_matrix
+
+
+
+
+def transpose(matrix):
+    assert matrix.get_dim()==2, "transpose not defined for N-D objects"
+    transposed_matrix = mat(args=(matrix.lenght(2), matrix.lenght(1)), typ=matrix.get_type())
+
+    for i in range(1, matrix.lenght(1) + 1):
+        for j in range(1, matrix.lenght(2) + 1):
+            transposed_matrix[(j, i)] = matrix[(i, j)]
+
+    return transposed_matrix
+
+
+
+
 
 
 
