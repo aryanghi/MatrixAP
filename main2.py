@@ -223,6 +223,7 @@ class mat:
 
 
     def __xor__(self, number):
+        assert type(number) == int, "power must be int"
         assert len(self._dim) == 2, "matrix pow only support 2 dimation matrix"
         assert self.lenght(1) == self.lenght(2), \
             "Matrix size is not consistent for power operation!"
@@ -388,6 +389,10 @@ def randn(*args):
 
 
 def sum(matrix):
+    if type(matrix) == int or type(matrix) == float:
+        newmat = mat((1, 1), typ=type(matrix))
+        newmat[(1, 1)] = matrix
+        return newmat
     assert matrix.get_dim() <= 2, "This program only suport one and two in sum"
     if matrix.get_dim()==1:
         return matrix
@@ -401,6 +406,10 @@ def sum(matrix):
 
 
 def prod(matrix):
+    if type(matrix) == int or type(matrix) == float:
+        newmat = mat((1, 1), typ=type(matrix))
+        newmat[(1, 1)] = matrix
+        return newmat
     assert matrix.get_dim() <= 2, "This program only suport one and two in sum"
     if matrix.get_dim()==1:
         return matrix
@@ -414,6 +423,10 @@ def prod(matrix):
 
 
 def min(matrix):
+    if type(matrix) == int or type(matrix) == float:
+        newmat = mat((1, 1), typ=type(matrix))
+        newmat[(1, 1)] = matrix
+        return newmat
     assert matrix.get_dim() <= 2, "This program only suport one and two in sum"
     if matrix.get_dim() == 1:
         return matrix
@@ -428,6 +441,10 @@ def min(matrix):
 
 
 def max(matrix):
+    if type(matrix) == int or type(matrix) == float:
+        newmat = mat((1, 1), typ=type(matrix))
+        newmat[(1, 1)] = matrix
+        return newmat
     assert matrix.get_dim()<=2,"This program only suport one and two in sum"
     if matrix.get_dim()==1:
         return matrix
@@ -442,52 +459,80 @@ def max(matrix):
 
 
 
-def sin(mat):
-    newmat = mat(mat._dim)
-    for i in range(mat.size()):
-        newmat._data[i] = math.sin(mat._data[i])
+def sin(matrix):
+    if type(matrix) == int or type(matrix) == float:
+        newmat = mat((1, 1), typ=float)
+        newmat[(1, 1)] = math.sin(matrix)
+        return newmat
+    newmat = mat(matrix._dim)
+    for i in range(matrix.size()):
+        newmat._data[i] = math.sin(matrix._data[i])
     return newmat
 
 
-def cos(mat):
-    newmat = mat(mat._dim)
-    for i in range(mat.size()):
-        newmat._data[i] = math.cos(mat._data[i])
+def cos(matrix):
+    if type(matrix) == int or type(matrix) == float:
+        newmat = mat((1,1), typ=float)
+        newmat[(1, 1)] = math.cos(matrix)
+        return newmat
+    newmat = mat(matrix._dim)
+    for i in range(matrix.size()):
+        newmat._data[i] = math.cos(matrix._data[i])
     return newmat
 
 
-def log(mat):
-    newmat = mat(mat._dim)
-    for i in range(mat.size()):
-        newmat._data[i] = math.log(mat._data[i])
+def log(matrix):
+    if type(matrix) == int or type(matrix) == float:
+        newmat = mat((1, 1), typ=float)
+        newmat[(1, 1)] = math.log(matrix)
+        return newmat
+    newmat = mat(matrix._dim)
+    for i in range(matrix.size()):
+        newmat._data[i] = math.log(matrix._data[i])
     return newmat
 
 
-def exp(mat):
-    newmat = mat(mat._dim)
-    for i in range(mat.size()):
-        newmat._data[i] = math.exp(mat._data[i])
+def exp(matrix):
+    if type(matrix) == int or type(matrix) == float:
+        newmat = mat((1, 1), typ=float)
+        newmat[(1, 1)] = math.exp(matrix)
+        return newmat
+    newmat = mat(matrix._dim)
+    for i in range(matrix.size()):
+        newmat._data[i] = math.exp(matrix._data[i])
     return newmat
 
 
-def log2(mat):
-    newmat = mat(mat._dim)
-    for i in range(mat.size()):
-        newmat._data[i] = math.log2(mat._data[i])
+def log2(matrix):
+    if type(matrix) == int or type(matrix) == float:
+        newmat = mat((1, 1), typ=float)
+        newmat[(1, 1)] = math.log2(matrix)
+        return newmat
+    newmat = mat(matrix._dim)
+    for i in range(matrix.size()):
+        newmat._data[i] = math.log2(matrix._data[i])
     return newmat
 
 
-def log10(mat):
-    newmat = mat(mat._dim)
-    for i in range(mat.size()):
-        newmat._data[i] = math.log10(mat._data[i])
+def log10(matrix):
+    if type(matrix) == int or type(matrix) == float:
+        newmat = mat((1, 1), typ=float)
+        newmat[(1, 1)] = math.log10(matrix)
+        return newmat
+    newmat = mat(matrix._dim)
+    for i in range(matrix.size()):
+        newmat._data[i] = math.log10(matrix._data[i])
     return newmat
 
 
-def tan(mat):
-    newmat = mat(mat._dim)
-    for i in range(mat.size()):
-        newmat._data[i] = math.tan(mat._data[i])
+def tan(matrix):
+    if type(matrix) == int or type(matrix) == float:
+        newmat = mat((1, 1), typ=float)
+        newmat[(1, 1)] = math.tan(matrix)
+        return newmat
+    newmat = mat(matrix._dim)
+    for i in range(matrix.size()):
+        newmat._data[i] = math.tan(matrix._data[i])
     return newmat
 
 
@@ -504,6 +549,10 @@ def pinv():
 
 
 def det(matrix):
+    if type(matrix) == int or type(matrix) == float:
+        newmat = mat((1, 1), typ=type(matrix))
+        newmat[(1, 1)] = matrix
+        return newmat
     assert matrix.get_dim() == 2, "matrix must be square"
     assert matrix.lenght(1)==matrix.lenght(2), "matrix must be square"
 
@@ -531,6 +580,10 @@ def det(matrix):
 
 
 def inv(matrix):
+    if type(matrix) == int or type(matrix) == float:
+        newmat = mat((1, 1), typ=type(matrix))
+        newmat[(1, 1)] = matrix
+        return newmat
     assert matrix.get_dim() == 2, "Inverse function currently supports only 2x2 matrices."
 
     det_matrix = det(matrix)
@@ -568,9 +621,11 @@ def inv(matrix):
 
 
 
-
-
 def transpose(matrix):
+    if type(matrix) == int or type(matrix) == float:
+        newmat = mat((1, 1), typ=type(matrix))
+        newmat[(1, 1)] = matrix
+        return newmat
     assert matrix.get_dim()==2, "transpose not defined for N-D objects"
     transposed_matrix = mat(args=(matrix.lenght(2), matrix.lenght(1)), typ=matrix.get_type())
 
@@ -579,8 +634,6 @@ def transpose(matrix):
             transposed_matrix[(j, i)] = matrix[(i, j)]
 
     return transposed_matrix
-
-
 
 
 
