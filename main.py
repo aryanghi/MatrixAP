@@ -578,9 +578,3 @@ def transpose(mat):
           newmat[(i + 1, j + 1)] = K
   return newmat
 
-
-
-print(cos(1))
-print(tan(1))
-print(exp(1))
-print(max(1))
