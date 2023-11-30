@@ -552,12 +552,3 @@ def transpose(matrix):
 
 
 
-
-A=mat()
-B=mat()
-A=A([[2,5],[8,9]])
-B=B([[6,0],[2,1]])
-print(A)
-print(A/B)
-
-
