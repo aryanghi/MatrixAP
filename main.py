@@ -7,6 +7,7 @@ class Matrix:
     self._data=np.array([[value]*n]*m,typ)
     self._rows=m
     self._cols=n
+    self._typ=typ
 
 
   #defining a class method for when th user wants to input a list
@@ -101,14 +102,32 @@ class Matrix:
 
 
   def __sub__(self,othermatrix):
-    assert self._rows==othermatrix._rows and\
-    self._cols==othermatrix._cols,\
-    "Matrix sizes are not consistent for subtraction operation!"
-    newmatrix=Matrix(self._rows,self._cols)
-    for r in range(self._rows):
-      for c in range(self._cols):
-        newmatrix._data[r][c]=self._data[r][c]-othermatrix._data[r][c]
-    return newmatrix
+    if type(othermatrix)==Matrix:
+      assert self._rows==othermatrix._rows and\
+      self._cols==othermatrix._cols,\
+      "Matrix sizes are not consistent for subtraction operation!"
+      newmatrix=Matrix(self._rows,self._cols)
+      for r in range(self._rows):
+        for c in range(self._cols):
+          newmatrix._data[r][c]=self._data[r][c]-othermatrix._data[r][c]
+      return newmatrix
+    elif type(othermatrix)==int or type(othermatrix)==float:
+        val = int
+        if type(othermatrix) == int:
+            for i in range(self._rows):
+                for j in range(self._cols):
+                    if type(self(i + 1, j + 1)) == np.float64:
+                        val = float
+        else:
+            val = float
+
+        newmat = Matrix(self._rows, self._cols, typ=val)
+        for i in range(self._rows):
+            for j in range(self._cols):
+                newmat[(i, j)] = self(i, j) - othermatrix
+        return newmat
+    else:
+        assert False, "syntax error"
 
 
 
@@ -156,14 +175,24 @@ class Matrix:
 
 
   def __truediv__(self,othermatrix):
-    assert self._rows==self._cols,\
-    "The first matrix must be a square matrix!"
-    assert othermatrix._rows==othermatrix._cols,\
-    "The second matrix must be a square matrix!"
-    assert self._rows==othermatrix._rows,\
-    "Matrix sizes are not consistent for it operation!"
-    newmatrix=self*inv(othermatrix)
-    return newmatrix
+    if type(othermatrix)==Matrix:
+      assert self._rows==self._cols,\
+      "The first matrix must be a square matrix!"
+      assert othermatrix._rows==othermatrix._cols,\
+      "The second matrix must be a square matrix!"
+      assert self._rows==othermatrix._rows,\
+      "Matrix sizes are not consistent for it operation!"
+      newmatrix=self*inv(othermatrix)
+      return newmatrix
+    elif type(othermatrix)==int or type(othermatrix)==float:
+        val=float
+        newmat=Matrix(self._rows,self._cols,typ=val)
+        for i in range(self._rows):
+            for j in range(self._cols):
+                newmat[(i,j)]=othermatrix/self(i,j)
+        return newmat
+    else:
+        assert False,"syntax error"
 
 
   def __floordiv__(self,othermatrix):
@@ -178,6 +207,7 @@ class Matrix:
 
 
   def __xor__(self,number):
+    assert type(number)==int,"power must be int"
     assert self._rows==self._cols,\
     "Matrix size is not consistent for power operation!"
     newmatrix=self
@@ -335,40 +365,68 @@ def randn(m=1,n=1):
 
 
 def sum(matrix):
+  if type(matrix) == int or type(matrix) == float:
+    newmat = Matrix(1, 1, typ=type(matrix))
+    newmat[(1, 1)] = matrix
+    return newmat
+  newmat=Matrix(m=1,n=matrix._cols,typ=matrix._typ)
   for c in range(matrix.numcols()):
     s=0
     for r in range(matrix.numrows()):
       s+=matrix._data[r][c]
-    print(s,"",end="")
+    newmat[(1,c+1)]=s
+  return newmat
 
 
 def prod(matrix):
+  if type(matrix) == int or type(matrix) == float:
+    newmat = Matrix(1, 1, typ=type(matrix))
+    newmat[(1, 1)] = matrix
+    return newmat
+  newmat=Matrix(1,matrix._cols,typ=matrix._typ)
   for c in range(matrix.numcols()):
     s=1
     for r in range(matrix.numrows()):
       s*=matrix._data[r][c]
-    print(s,"",end="")
+    newmat[(1,c+1)]=s
+  return newmat
 
 
 def min(matrix):
+  if type(matrix) == int or type(matrix) == float:
+    newmat = Matrix(1, 1, typ=type(matrix))
+    newmat[(1, 1)] = matrix
+    return newmat
+  newmat=Matrix(1,matrix._cols,typ=matrix._typ)
   for c in range(matrix.numcols()):
     s=matrix._data[0][c]
     for r in range(matrix.numrows()):
       if matrix._data[r][c]<s:
         s=matrix._data[r][c]
-    print(s,"",end="")
+    newmat[(1,c+1)]=s
+  return newmat
 
 
 def max(matrix):
+  if type(matrix) == int or type(matrix) == float:
+    newmat = Matrix(1, 1, typ=type(matrix))
+    newmat[(1, 1)] = matrix
+    return newmat
+  newmat=Matrix(1,matrix._cols,typ=matrix._typ)
   for c in range(matrix.numcols()):
     s=matrix._data[0][c]
     for r in range(matrix.numrows()):
       if matrix._data[r][c]>s:
         s=matrix._data[r][c]
-    print(s,"",end="")
+    newmat[(1,c+1)]=s
+  return newmat
 
 
 def sin(mat):
+    if type(mat) == int or type(mat) == float:
+        newmat = Matrix(1, 1, typ=float)
+        newmat[(1, 1)] = math.sin(mat)
+        return newmat
     newmat = Matrix(mat.numrows(), mat.numcols(), typ=float)
     for i in range(mat.numrows()):
         for j in range(mat.numcols()):
@@ -377,6 +435,10 @@ def sin(mat):
 
 
 def cos(mat):
+    if type(mat) == int or type(mat) == float:
+        newmat = Matrix(1, 1, typ=float)
+        newmat[(1, 1)] = math.cos(mat)
+        return newmat
     newmat=Matrix(mat.numrows(),mat.numcols(),typ=float)
     for i in range(mat.numrows()):
         for j in range(mat.numcols()):
@@ -385,6 +447,10 @@ def cos(mat):
 
 
 def log(mat):
+    if type(mat) == int or type(mat) == float:
+        newmat = Matrix(1, 1, typ=float)
+        newmat[(1, 1)] = math.log(mat)
+        return newmat
     newmat = Matrix(mat.numrows(), mat.numcols(), typ=float)
     for i in range(mat.numrows()):
         for j in range(mat.numcols()):
@@ -393,6 +459,10 @@ def log(mat):
 
 
 def exp(mat):
+    if type(mat) == int or type(mat) == float:
+        newmat = Matrix(1, 1, typ=float)
+        newmat[(1, 1)] = math.exp(mat)
+        return newmat
     newmat = Matrix(mat.numrows(), mat.numcols(), typ=float)
     for i in range(mat.numrows()):
         for j in range(mat.numcols()):
@@ -401,6 +471,10 @@ def exp(mat):
 
 
 def log2(mat):
+    if type(mat) == int or type(mat) == float:
+        newmat = Matrix(1, 1, typ=float)
+        newmat[(1, 1)] = math.log2(mat)
+        return newmat
     newmat = Matrix(mat.numrows(), mat.numcols(), typ=float)
     for i in range(mat.numrows()):
         for j in range(mat.numcols()):
@@ -409,6 +483,10 @@ def log2(mat):
 
 
 def log10(mat):
+    if type(mat) == int or type(mat) == float:
+        newmat = Matrix(1, 1, typ=float)
+        newmat[(1, 1)] = math.log10(mat)
+        return newmat
     newmat = Matrix(mat.numrows(), mat.numcols(), typ=float)
     for i in range(mat.numrows()):
         for j in range(mat.numcols()):
@@ -416,6 +494,10 @@ def log10(mat):
     return newmat
 
 def tan(mat):
+    if type(mat) == int or type(mat) == float:
+        newmat = Matrix(1, 1, typ=float)
+        newmat[(1, 1)] = math.tan(mat)
+        return newmat
     newmat = Matrix(mat.numrows(), mat.numcols(), typ=float)
     for i in range(mat.numrows()):
         for j in range(mat.numcols()):
@@ -435,8 +517,10 @@ def pinv():
 
 
 def det(mat):
-    if type(mat)==int or type(mat)==float:
-        return mat
+    if type(mat) == int or type(mat) == float:
+        newmat = Matrix(1, 1, typ=type(mat))
+        newmat[(1, 1)] = mat
+        return newmat
     assert (mat.numrows() == mat.numcols()), "det: A must be a square matrix"
     copymat=[]
     for i in range(mat.numrows()):
@@ -451,8 +535,10 @@ def det(mat):
 
 
 def inv(mat):
-    if type(mat)==int or type(mat)==float:
-        return mat
+    if type(mat) == int or type(mat) == float:
+        newmat = Matrix(1, 1, typ=type(mat))
+        newmat[(1, 1)] = mat
+        return newmat
     assert mat.numrows() == mat.numcols(), "A must be a square matrix"
     copymat = []
     for i in range(mat.numrows()):
@@ -473,7 +559,9 @@ def inv(mat):
 
 def transpose(mat):
   if type(mat)==int or type(mat)==float:
-    return mat
+    newmat=Matrix(1,1,typ=type(mat))
+    newmat[(1,1)]=mat
+    return newmat
   copymat = []
   for i in range(mat.numrows()):
       copymatrows = []
@@ -491,3 +579,8 @@ def transpose(mat):
   return newmat
 
 
+
+print(cos(1))
+print(tan(1))
+print(exp(1))
+print(max(1))
