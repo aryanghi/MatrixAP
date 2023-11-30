@@ -389,6 +389,8 @@ def randn(*args):
 
 def sum(matrix):
     assert matrix.get_dim() <= 2, "This program only suport one and two in sum"
+    if matrix.get_dim()==1:
+        return matrix
     newmat = mat((1, matrix.lenght(2)))
     for c in range(matrix.lenght(2)):
         s = 0
@@ -399,15 +401,45 @@ def sum(matrix):
 
 
 def prod(matrix):
-    pass
+    assert matrix.get_dim() <= 2, "This program only suport one and two in sum"
+    if matrix.get_dim()==1:
+        return matrix
+    newmat = mat((1, matrix.lenght(2)))
+    for c in range(matrix.lenght(2)):
+        s = 1
+        for r in range(matrix.lenght(1)):
+            s *= matrix[(r + 1, c + 1)]
+        newmat[(1, c + 1)] = s
+    return newmat
 
 
 def min(matrix):
-    pass
+    assert matrix.get_dim() <= 2, "This program only suport one and two in sum"
+    if matrix.get_dim() == 1:
+        return matrix
+    newmat = mat((1, matrix.lenght(2)))
+    for c in range(1, matrix.lenght(2) + 1):
+        Min = matrix[(1, c)]
+        for r in range(1, matrix.lenght(1) + 1):
+            if Min > matrix[(r, c)]:
+                Min = matrix[(r, c)]
+        newmat[(1, c)] = Min
+    return newmat
 
 
 def max(matrix):
-    pass
+    assert matrix.get_dim()<=2,"This program only suport one and two in sum"
+    if matrix.get_dim()==1:
+        return matrix
+    newmat = mat((1, matrix.lenght(2)))
+    for c in range(1,matrix.lenght(2)+1):
+        Max = matrix[(1,c)]
+        for r in range(1,matrix.lenght(1)+1):
+            if Max<matrix[(r,c)]:
+                Max=matrix[(r,c)]
+        newmat[(1,c)]=Max
+    return newmat
+
 
 
 def sin(mat):
