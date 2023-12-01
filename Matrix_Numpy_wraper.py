@@ -4,7 +4,7 @@ from random import normalvariate
 
 class Matrix:
   def __init__(self,m=0,n=0,value=0,typ=int):
-    self._data=np.array([[value]*n]*m,typ)
+    self._data=np.array([[value]*n]*m,typ,order="F")
     self._rows=m
     self._cols=n
     self._typ=typ
@@ -512,8 +512,12 @@ def std():
   pass
 
 
-def pinv():
-  pass
+def pinv(mat):
+    if type(mat) == int or type(mat) == float:
+        newmat = Matrix(1, 1, typ=type(mat))
+        newmat[(1, 1)] = mat
+        return newmat
+    return inv(mat)*eye(mat.numrows(),mat.numcols())
 
 
 def det(mat):
@@ -577,4 +581,6 @@ def transpose(mat):
           K = nparr[i][j]
           newmat[(i + 1, j + 1)] = K
   return newmat
+
+
 

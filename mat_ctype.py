@@ -1,6 +1,7 @@
 import ctypes as ct
 import math
 import random
+import statistics
 
 
 class mat:
@@ -192,28 +193,18 @@ class mat:
         else:
             assert False,"syntax error"
 
-
     def __truediv__(self, othermatrix):
-        if type(othermatrix)==mat:
-            newmat=inv(othermatrix)
+        if type(othermatrix) == mat:
+            newmat = inv(othermatrix)
             return self * newmat
         elif type(othermatrix) == int or type(othermatrix) == float:
-            val = int
-            if type(othermatrix) == int:
-                for i in range(self._size):
-                    if type(self._data[i]) == float:
-                        val = float
-            else:
-                val = float
+            val = int if isinstance(othermatrix, int) else float
             newmat = mat(self._dim, typ=val)
             for i in range(self._size):
                 newmat._data[i] = othermatrix / self._data[i]
             return newmat
         else:
-            assert False,"syntax error"
-
-
-
+            assert False, "syntax error"
 
     def __floordiv__(self, othermatrix):
         assert type(othermatrix) == mat, "erorr"
@@ -387,7 +378,6 @@ def randn(*args):
     return result
 
 
-
 def sum(matrix):
     if type(matrix) == int or type(matrix) == float:
         newmat = mat((1, 1), typ=type(matrix))
@@ -403,6 +393,7 @@ def sum(matrix):
             s += matrix[(r + 1, c + 1)]
         newmat[(1, c + 1)] = s
     return newmat
+
 
 
 def prod(matrix):
@@ -536,16 +527,53 @@ def tan(matrix):
     return newmat
 
 
-def var():
-    pass
+def var(matrix):
+    if type(matrix) == int or type(matrix) == float:
+        newmat = mat((1, 1), typ=type(mat))
+        newmat[(1, 1)] = mat
+        return newmat
+    assert matrix.get_dim() == 2, "matrix must be Two-dimensional"
+    copymat = []
+    for i in range(matrix.lenght(2)):
+        copymatrows = []
+        for j in range(matrix.lenght(1)):
+            copymatrows.append(matrix[(j + 1, i + 1)])
+        copymat.append(copymatrows)
+    for i in range(len(copymat)):
+        copymat[i]=statistics.variance(copymat[i])
+    newmat=mat()
+    newmat=newmat([copymat])
+    return newmat
 
 
-def std():
-    pass
 
 
-def pinv():
-    pass
+def std(matrix):
+    if type(matrix) == int or type(matrix) == float:
+        newmat = mat((1, 1), typ=type(mat))
+        newmat[(1, 1)] = mat
+        return newmat
+    assert matrix.get_dim() == 2, "matrix must be Two-dimensional"
+    copymat = []
+    for i in range(matrix.lenght(2)):
+        copymatrows = []
+        for j in range(matrix.lenght(1)):
+            copymatrows.append(matrix[(j + 1, i + 1)])
+        copymat.append(copymatrows)
+    for i in range(len(copymat)):
+        copymat[i] = statistics.stdev(copymat[i])
+    newmat = mat()
+    newmat = newmat([copymat])
+    return newmat
+
+
+def pinv(matrix):
+    if type(matrix) == int or type(matrix) == float:
+        newmat = mat((1, 1), typ=type(mat))
+        newmat[(1, 1)] = mat
+        return newmat
+    assert matrix.get_dim() == 2, "matrix must be Two-dimensional"
+    return inv(matrix)*eye(matrix._dim[0],matrix._dim[1])
 
 
 def det(matrix):
@@ -634,6 +662,8 @@ def transpose(matrix):
             transposed_matrix[(j, i)] = matrix[(i, j)]
 
     return transposed_matrix
+
+
 
 
 
