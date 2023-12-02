@@ -293,7 +293,7 @@ class mat:
 
 
     def __call__(self, *args):
-        if len(args) == 1 and type(args[0]) == list:
+        if len(args) == 1 and type(args[0]) == list and type(args[0][0])==list:
             nR = len(args[0])
             nC = len(args[0][0])
             typ = int
@@ -311,6 +311,9 @@ class mat:
                     for j in range(nC):
                         newmat[(i + 1, j + 1)] = args[0][i][j]
                 return newmat
+
+        elif len(args) == 1 and type(args[0]) == list and (type(args[0][0])==int or type(args[0][0])==float):
+            return self([args[0]])
 
         elif (len(args) == 1 and type(args[0]) == int):
             j = 1
@@ -662,6 +665,7 @@ def transpose(matrix):
             transposed_matrix[(j, i)] = matrix[(i, j)]
 
     return transposed_matrix
+
 
 
 

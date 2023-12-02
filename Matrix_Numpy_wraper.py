@@ -302,7 +302,7 @@ class Matrix:
 
 
   def __call__(self, arg1, arg2=None):
-    if (type(arg1) == list and arg2 == None):
+    if (type(arg1) == list and arg2 == None and type(arg1[0])==list):
       del self._data
       return self.FromList(arg1)
 
@@ -317,6 +317,9 @@ class Matrix:
           j = j + 1
 
       return self[(i, j)]
+
+    elif type(arg1) == list and arg2 == None and (type(arg1[0])==int or type(arg1[0])==float):
+        return self([arg1],arg2=arg2)
 
     elif type(arg1) == int and type(arg2) == int:
         return self[(arg1, arg2)]
