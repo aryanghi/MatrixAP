@@ -15,6 +15,11 @@
 #include "var.h"
 
 
+int *data;
+int *dim;
+int len_dim;
+int size_data;
+
 class Mat {
 private:
     double *data;
@@ -118,6 +123,57 @@ public:
         class Mat newmat(dim,len_dim);
         for(i=0;i<size_data;++i)
             newmat.data[i]=data[i]+mat;
+        return newmat;
+    }
+
+
+    Mat operator-(Mat mat){
+        assert(mat.len_dimation()==len_dim); //Mats must in same dimantion
+        int i;
+        for(i=0;i<len_dim;++i)
+            assert(mat.length(i+1)==length(i+1)); //Mats must in same lenght
+        class Mat newmat=Mat(dim,len_dim);
+        for(i=0;i<size_data;++i)
+            newmat.data[i]=data[i]-mat.data[i];
+        return newmat;
+    }
+
+
+    Mat operator-(double mat){
+        int i;
+        class Mat newmat(dim,len_dim);
+        for(i=0;i<size_data;++i)
+            newmat.data[i]=data[i]-mat;
+        return newmat;
+    }
+
+
+    Mat operator*(Mat mat){
+        Mat newmat;
+        return newmat;
+    }
+
+
+
+
+    Mat operator*(double mat){
+        Mat newmat(dim,len_dim);
+        int i;
+        for(i=0;i<size_data;++i)
+            newmat.data[i]=mat * data[i];
+        return newmat;
+    }
+
+
+    Mat power(int n){  //pow member funcion
+        int i;
+        Mat newmat(dim,len_dim);
+        newmat.data=data;
+        newmat.dim=dim;
+        newmat.len_dim=len_dim;
+        newmat.size_data=size_data;
+        for(i=0;i<n-1;++i)
+            newmat= (*this) * newmat;
         return newmat;
     }
 
@@ -252,6 +308,44 @@ public:
         }
         else
             assert(false); // this opreator only support same dim mats
+    }
+
+
+    void swapRows(int row1, int row2) {
+        assert(row1 >= 1 && row1 <= len_dim);
+        assert(row2 >= 1 && row2 <= len_dim);
+
+        if (row1 != row2) {
+            for (int j = 1; j <= dim[1]; ++j) {
+                std::vector<int> indices1 = {row1, j};
+                std::vector<int> indices2 = {row2, j};
+                std::swap(data[(row1 - 1) * dim[1] + (j - 1)], data[(row2 - 1) * dim[1] + (j - 1)]);
+            }
+        }
+    }
+
+
+    void setValue(double value, std::vector<int> indices) {
+        assert(indices.size() == len_dim);
+
+        int index = 0;
+        int stride = 1;
+
+        for (int i = 0; i < len_dim; ++i) {
+            assert(indices[i] >= 1 && indices[i] <= dim[i]);
+            index += (indices[i] - 1) * stride;
+            stride *= dim[i];
+        }
+
+        assert(index >= 0 && index < size_data);
+
+        data[index] = value;
+    }
+
+    void elementWiseDivide(double divisor) {
+        for (int i = 0; i < size_data; ++i) {
+            data[i] /= divisor;
+        }
     }
 
 
@@ -458,6 +552,50 @@ Mat Std(class Mat mat) {
     }
     return newmat;
 }
+
+
+
+double det(Mat mat) {
+    assert(mat.len_dimation() == 2); // Determinant is supported only for 2D matrices
+    assert(mat.length(1) == mat.length(2)); // Matrix must be square
+
+    int n = mat.length(1);
+
+    if (n == 1) {
+        return mat({1, 1}); // Base case for 1x1 matrix
+    } else if (n == 2) {
+        // Base case for 2x2 matrix
+        return mat({1, 1}) * mat({2, 2}) - mat({1, 2}) * mat({2, 1});
+    } else {
+        // Recursive case for larger matrices
+        double determinant = 0;
+
+        for (int j = 1; j <= n; ++j) {
+            int arr[2]={n-1,n-1};
+            Mat minorMat(arr,2);
+
+            // Construct minor matrix by excluding current row and column
+            for (int i = 2; i <= n; ++i) {
+                int l=1;
+                for (int k = 1; k <= n; ++k) {
+                    if (k != j) {
+                        std::vector<int> indices={i-1,l};
+                        std::vector<int> indices1={i,k};
+                        minorMat(mat(indices1),indices) ;
+                        ++l;
+                    }
+                }
+            }
+
+            // Recursively calculate determinant using the minor matrix
+            determinant += pow(-1, 1 + j) * mat({1, j}) * det(minorMat);
+        }
+
+        return determinant;
+    }
+}
+
+
 
 
 
