@@ -226,61 +226,106 @@ class mat:
 
 
     def __eq__(self, other):
-        if self.get_dim() != other.get_dim():
-            return False  # Matrices with different dimensions are not equal
+        if type(other)==mat:
+            if self.get_dim() != other.get_dim():
+                return False  # Matrices with different dimensions are not equal
 
-        newmat = mat(args=self._dim)
-        for i in range(self.get_size()):
-            newmat._data[i] = 1 if self._data[i] == other._data[i] else 0
-        return newmat
+            newmat = mat(args=self._dim)
+            for i in range(self.get_size()):
+                newmat._data[i] = 1 if self._data[i] == other._data[i] else 0
+            return newmat
+        else:
+            newmat=mat(self._dim)
+            for i in range(self.get_size()):
+                if self._data[i]==other:
+                    newmat._data[i]=1
+                else:
+                    newmat._data[i]=0
+            return newmat
 
 
 
     def __lt__(self, other):
-        assert self._dim == other._dim, 'mx_el_eq: nonconformant arguments'
-        newmat = mat(self._dim)
-        for i in range(self.get_size()):
-            if (self._data[i] < other._data[i]):
-                newmat._data[i] = 1
-            else:
-                newmat._data[i] = 0
-        return newmat
+        if type(other) == mat:
+            assert self._dim == other._dim, 'mx_el_eq: nonconformant arguments'
+            newmat = mat(self._dim)
+            for i in range(self.get_size()):
+                if (self._data[i] < other._data[i]):
+                    newmat._data[i] = 1
+                else:
+                    newmat._data[i] = 0
+            return newmat
+        else:
+            newmat=mat(self._dim)
+            for i in range(self.get_size()):
+                if self._data[i]<other:
+                    newmat._data[i]=1
+                else:
+                    newmat._data[i]=0
+            return newmat
 
 
 
     def __le__(self, other):
-        assert self._dim == other._dim, 'mx_el_eq: nonconformant arguments'
-        newmat = mat(self._dim)
-        for i in range(self.get_size()):
-            if (self._data[i] <= other._data[i]):
-                newmat._data[i] = 1
-            else:
-                newmat._data[i] = 0
-        return newmat
+        if type(other) == mat:
+            assert self._dim == other._dim, 'mx_el_eq: nonconformant arguments'
+            newmat = mat(self._dim)
+            for i in range(self.get_size()):
+                if (self._data[i] <= other._data[i]):
+                    newmat._data[i] = 1
+                else:
+                    newmat._data[i] = 0
+            return newmat
+        else:
+            newmat=mat(self._dim)
+            for i in range(self.get_size()):
+                if self._data[i]<=other:
+                    newmat._data[i]=1
+                else:
+                    newmat._data[i]=0
+            return newmat
 
 
 
     def __ne__(self, other):
-        assert self._dim == other._dim, 'mx_el_eq: nonconformant arguments'
-        newmat = mat(self._dim)
-        for i in range(self.get_size()):
-            if (self._data[i] != other._data[i]):
-                newmat._data[i] = 1
-            else:
-                newmat._data[i] = 0
-        return newmat
+        if type(other) == mat:
+            assert self._dim == other._dim, 'mx_el_eq: nonconformant arguments'
+            newmat = mat(self._dim)
+            for i in range(self.get_size()):
+                if (self._data[i] != other._data[i]):
+                    newmat._data[i] = 1
+                else:
+                    newmat._data[i] = 0
+            return newmat
+        else:
+            newmat=mat(self._dim)
+            for i in range(self.get_size()):
+                if self._data[i]!=other:
+                    newmat._data[i]=1
+                else:
+                    newmat._data[i]=0
+            return newmat
 
 
 
     def __ge__(self, other):
-        assert self._dim == other._dim, 'mx_el_eq: nonconformant arguments'
-        newmat = mat(self._dim)
-        for i in range(self.get_size()):
-            if (self._data[i] >= other._data[i]):
-                newmat._data[i] = 1
-            else:
-                newmat._data[i] = 0
-        return newmat
+        if type(other) == mat:
+            assert self._dim == other._dim, 'mx_el_eq: nonconformant arguments'
+            newmat = mat(self._dim)
+            for i in range(self.get_size()):
+                if (self._data[i] >= other._data[i]):
+                    newmat._data[i] = 1
+                else:
+                    newmat._data[i] = 0
+            return newmat
+        else:
+            newmat=mat(self._dim)
+            for i in range(self.get_size()):
+                if self._data[i]>=other:
+                    newmat._data[i]=1
+                else:
+                    newmat._data[i]=0
+            return newmat
 
 
 
@@ -288,6 +333,16 @@ class mat:
         newmat = mat(self._dim)
         for i in range(self._size):
             newmat._data[i] = (-(self._data[i]))
+        return newmat
+
+
+    def dot(self,mat1):
+        assert self.get_dim()==mat1.get_dim() ,"error"
+        for i in range(self.get_dim()):
+            assert self.lenght(i+1)==mat1.lenght(i+1) , "error"
+        newmat=mat(self._dim,typ=float)
+        for i in range(self._size):
+            newmat._data[i]=self._data[i] * mat1._data[i]
         return newmat
 
 
@@ -458,8 +513,8 @@ def sin(matrix):
         newmat = mat((1, 1), typ=float)
         newmat[(1, 1)] = math.sin(matrix)
         return newmat
-    newmat = mat(matrix._dim)
-    for i in range(matrix.size()):
+    newmat = mat(matrix._dim, typ=float)
+    for i in range(matrix.get_size()):
         newmat._data[i] = math.sin(matrix._data[i])
     return newmat
 
@@ -469,8 +524,8 @@ def cos(matrix):
         newmat = mat((1,1), typ=float)
         newmat[(1, 1)] = math.cos(matrix)
         return newmat
-    newmat = mat(matrix._dim)
-    for i in range(matrix.size()):
+    newmat = mat(matrix._dim,typ=float)
+    for i in range(matrix.get_size()):
         newmat._data[i] = math.cos(matrix._data[i])
     return newmat
 
@@ -480,8 +535,8 @@ def log(matrix):
         newmat = mat((1, 1), typ=float)
         newmat[(1, 1)] = math.log(matrix)
         return newmat
-    newmat = mat(matrix._dim)
-    for i in range(matrix.size()):
+    newmat = mat(matrix._dim,typ=float)
+    for i in range(matrix.get_size()):
         newmat._data[i] = math.log(matrix._data[i])
     return newmat
 
@@ -491,8 +546,8 @@ def exp(matrix):
         newmat = mat((1, 1), typ=float)
         newmat[(1, 1)] = math.exp(matrix)
         return newmat
-    newmat = mat(matrix._dim)
-    for i in range(matrix.size()):
+    newmat = mat(matrix._dim,typ=float)
+    for i in range(matrix.get_size()):
         newmat._data[i] = math.exp(matrix._data[i])
     return newmat
 
@@ -502,8 +557,8 @@ def log2(matrix):
         newmat = mat((1, 1), typ=float)
         newmat[(1, 1)] = math.log2(matrix)
         return newmat
-    newmat = mat(matrix._dim)
-    for i in range(matrix.size()):
+    newmat = mat(matrix._dim,typ=float)
+    for i in range(matrix.get_size()):
         newmat._data[i] = math.log2(matrix._data[i])
     return newmat
 
@@ -513,8 +568,8 @@ def log10(matrix):
         newmat = mat((1, 1), typ=float)
         newmat[(1, 1)] = math.log10(matrix)
         return newmat
-    newmat = mat(matrix._dim)
-    for i in range(matrix.size()):
+    newmat = mat(matrix._dim,typ=float)
+    for i in range(matrix.get_size()):
         newmat._data[i] = math.log10(matrix._data[i])
     return newmat
 
@@ -524,8 +579,8 @@ def tan(matrix):
         newmat = mat((1, 1), typ=float)
         newmat[(1, 1)] = math.tan(matrix)
         return newmat
-    newmat = mat(matrix._dim)
-    for i in range(matrix.size()):
+    newmat = mat(matrix._dim,typ=float)
+    for i in range(matrix.get_size()):
         newmat._data[i] = math.tan(matrix._data[i])
     return newmat
 
@@ -577,6 +632,30 @@ def pinv(matrix):
         return newmat
     assert matrix.get_dim() == 2, "matrix must be Two-dimensional"
     return inv(matrix)*eye(matrix._dim[0],matrix._dim[1])
+
+
+def any(matrix):
+  newmat=mat((1,matrix.lenght(2)))
+  for c in range(1,matrix.lenght(2)+1):
+    s=0
+    for r in range(1,matrix.lenght(1)+1):
+      if matrix[(r,c)]!=0:
+        s+=1
+    if s!=0:
+      newmat[(1,c)]=1
+  return newmat
+
+
+def all(matrix):
+  newmat=mat((1,matrix.lenght(2)))
+  for c in range(1,matrix.lenght(2)+1):
+    s=0
+    for r in range(1,matrix.lenght(1)+1):
+      if matrix[(r,c)]!=0:
+        s+=1
+    if s==matrix.lenght(1):
+      newmat[(1,c)]=1
+  return newmat
 
 
 def det(matrix):
@@ -668,6 +747,27 @@ def transpose(matrix):
 
 
 
+def is_eqal(mat1,mat2):
+    if mat1.get_dim() != mat2.get_dim():
+        return False
+    for i in range(mat1.get_dim()):
+        if mat1.lenght(i+1)!=mat2.lenght(i+1):
+            return False
+    for i in range(mat1.get_size()):
+        if mat1._data[i]!=mat2._data[i]:
+            return False
+    return True
+
+def is_aprox_eqal(mat1,mat2,e=1e-5):
+    if mat1.get_dim() != mat2.get_dim():
+        return False
+    for i in range(mat1.get_dim()):
+        if mat1.lenght(i+1)!=mat2.lenght(i+1):
+            return False
+    for i in range(mat1.get_size()):
+        if abs(mat1._data[i]-mat2._data[i])>e:
+            return False
+    return True
 
 
 

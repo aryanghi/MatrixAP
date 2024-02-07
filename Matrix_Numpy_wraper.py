@@ -217,73 +217,126 @@ class Matrix:
 
 
   def __eq__(self, other):
-      assert self._rows==other.numrows() and self._cols==other.numcols(),\
-          f"mx_el_eq: nonconformant arguments \
-          (op1 is {self._rows}x{self._cols}, op2 is {other.numrows()}x{other.numcols()})"
-      newmat=Matrix(self._rows,self._cols)
-      for i in range(self._rows):
-          for j in range(self._cols):
-              if(self(i+1,j+1)==other(i+1,j+1)):
-                  newmat[(i+1,j+1)]=1
-              else:
-                  newmat[(i+1,j+1)]=0
-      return newmat
+      if type(other)==Matrix:
+        assert self._rows==other.numrows() and self._cols==other.numcols(),\
+            f"mx_el_eq: nonconformant arguments \
+            (op1 is {self._rows}x{self._cols}, op2 is {other.numrows()}x{other.numcols()})"
+        newmat=Matrix(self._rows,self._cols)
+        for i in range(self._rows):
+            for j in range(self._cols):
+                if(self(i+1,j+1)==other(i+1,j+1)):
+                    newmat[(i+1,j+1)]=1
+                else:
+                    newmat[(i+1,j+1)]=0
+        return newmat
+      else:
+          newmat=Matrix(self._rows,self._cols)
+          for i in range(self._rows):
+              for j in range(self._cols):
+                  if(self(i+1,j+1) == other):
+                      newmat[(i + 1, j + 1)] = 1
+                  else:
+                      newmat[(i + 1, j + 1)] = 0
+          return newmat
 
 
 
   def __lt__(self, other):
-      assert self._rows==other.numrows() and self._cols==other.numcols(),\
-          f"mx_el_eq: nonconformant arguments \
-          (op1 is {self._rows}x{self._cols}, op2 is {other.numrows()}x{other.numcols()})"
-      newmat=Matrix(self._rows,self._cols)
-      for i in range(self._rows):
-          for j in range(self._cols):
-              if (self(i + 1, j + 1) < other(i + 1, j + 1)):
-                  newmat[(i + 1, j + 1)] = 1
-              else:
-                  newmat[(i + 1, j + 1)] = 0
-      return newmat
+      if type(other) == Matrix:
+        assert self._rows==other.numrows() and self._cols==other.numcols(),\
+            f"mx_el_eq: nonconformant arguments \
+            (op1 is {self._rows}x{self._cols}, op2 is {other.numrows()}x{other.numcols()})"
+        newmat=Matrix(self._rows,self._cols)
+        for i in range(self._rows):
+            for j in range(self._cols):
+                if (self(i + 1, j + 1) < other(i + 1, j + 1)):
+                    newmat[(i + 1, j + 1)] = 1
+                else:
+                    newmat[(i + 1, j + 1)] = 0
+        return newmat
+      else:
+          newmat=Matrix(self._rows,self._cols)
+          for i in range(self._rows):
+              for j in range(self._cols):
+                  if(self(i+1,j+1) < other):
+                      newmat[(i + 1, j + 1)] = 1
+                  else:
+                      newmat[(i + 1, j + 1)] = 0
+          return newmat
+
+
 
   def __le__(self, other):
-      assert self._rows==other.numrows() and self._cols==other.numcols(),\
-          f"mx_el_eq: nonconformant arguments \
-          (op1 is {self._rows}x{self._cols}, op2 is {other.numrows()}x{other.numcols()})"
-      newmat=Matrix(self._rows,self._cols)
-      for i in range(self._rows):
-          for j in range(self._cols):
-              if (self(i + 1, j + 1) <= other(i + 1, j + 1)):
-                  newmat[(i + 1, j + 1)] = 1
-              else:
-                  newmat[(i + 1, j + 1)] = 0
-      return newmat
+      if type(other) == Matrix:
+        assert self._rows==other.numrows() and self._cols==other.numcols(),\
+            f"mx_el_eq: nonconformant arguments \
+            (op1 is {self._rows}x{self._cols}, op2 is {other.numrows()}x{other.numcols()})"
+        newmat=Matrix(self._rows,self._cols)
+        for i in range(self._rows):
+            for j in range(self._cols):
+                if (self(i + 1, j + 1) <= other(i + 1, j + 1)):
+                    newmat[(i + 1, j + 1)] = 1
+                else:
+                    newmat[(i + 1, j + 1)] = 0
+        return newmat
+      else:
+          newmat=Matrix(self._rows,self._cols)
+          for i in range(self._rows):
+              for j in range(self._cols):
+                  if(self(i+1,j+1) <= other):
+                      newmat[(i + 1, j + 1)] = 1
+                  else:
+                      newmat[(i + 1, j + 1)] = 0
+          return newmat
+
 
   def __ne__(self, other):
-      assert self._rows==other.numrows() and self._cols==other.numcols(),\
-          f"mx_el_eq: nonconformant arguments \
-          (op1 is {self._rows}x{self._cols}, op2 is {other.numrows()}x{other.numcols()})"
-      newmat=Matrix(self._rows,self._cols)
-      for i in range(self._rows):
+      if type(other) == Matrix:
+        assert self._rows==other.numrows() and self._cols==other.numcols(),\
+            f"mx_el_eq: nonconformant arguments \
+            (op1 is {self._rows}x{self._cols}, op2 is {other.numrows()}x{other.numcols()})"
+        newmat=Matrix(self._rows,self._cols)
+        for i in range(self._rows):
           for j in range(self._cols):
               if (self(i + 1, j + 1) != other(i + 1, j + 1)):
                   newmat[(i + 1, j + 1)] = 1
               else:
                   newmat[(i + 1, j + 1)] = 0
-      return newmat
+        return newmat
+      else:
+          newmat=Matrix(self._rows,self._cols)
+          for i in range(self._rows):
+              for j in range(self._cols):
+                  if(self(i+1,j+1) != other):
+                      newmat[(i + 1, j + 1)] = 1
+                  else:
+                      newmat[(i + 1, j + 1)] = 0
+          return newmat
 
 
 
   def __ge__(self, other):
-      assert self._rows==other.numrows() and self._cols==other.numcols(),\
-          f"mx_el_eq: nonconformant arguments \
-          (op1 is {self._rows}x{self._cols}, op2 is {other.numrows()}x{other.numcols()})"
-      newmat=Matrix(self._rows,self._cols)
-      for i in range(self._rows):
-          for j in range(self._cols):
-              if (self(i + 1, j + 1) >= other(i + 1, j + 1)):
-                  newmat[(i + 1, j + 1)] = 1
-              else:
-                  newmat[(i + 1, j + 1)] = 0
-      return newmat
+      if type(other) == Matrix:
+        assert self._rows==other.numrows() and self._cols==other.numcols(),\
+            f"mx_el_eq: nonconformant arguments \
+            (op1 is {self._rows}x{self._cols}, op2 is {other.numrows()}x{other.numcols()})"
+        newmat=Matrix(self._rows,self._cols)
+        for i in range(self._rows):
+            for j in range(self._cols):
+                if (self(i + 1, j + 1) >= other(i + 1, j + 1)):
+                    newmat[(i + 1, j + 1)] = 1
+                else:
+                    newmat[(i + 1, j + 1)] = 0
+        return newmat
+      else:
+          newmat=Matrix(self._rows,self._cols)
+          for i in range(self._rows):
+              for j in range(self._cols):
+                  if(self(i+1,j+1) >= other):
+                      newmat[(i + 1, j + 1)] = 1
+                  else:
+                      newmat[(i + 1, j + 1)] = 0
+          return newmat
 
 
   def __neg__(self):
@@ -515,6 +568,30 @@ def std():
   pass
 
 
+def any(mat):
+  newmat=Matrix(1,mat.numcols(),0)
+  for c in range(mat.numcols()):
+    s=0
+    for r in range(mat.numrows()):
+      if mat._data[r][c]!=0:
+        s+=1
+    if s!=0:
+      newmat._data[0][c]=1
+  return newmat
+
+
+def all(mat):
+  newmat=Matrix(1,mat.numcols(),0)
+  for c in range(mat.numcols()):
+    s=0
+    for r in range(mat.numrows()):
+      if mat._data[r][c]!=0:
+        s+=1
+    if s==mat.numrows():
+      newmat._data[0][c]=1
+  return newmat
+
+
 def pinv(mat):
     if type(mat) == int or type(mat) == float:
         newmat = Matrix(1, 1, typ=type(mat))
@@ -584,6 +661,29 @@ def transpose(mat):
           K = nparr[i][j]
           newmat[(i + 1, j + 1)] = K
   return newmat
+
+
+def is_eqal(mat1,mat2):
+    if mat1._rows!=mat2._rows:
+        return False
+    if mat1._cols!=mat2._cols:
+        return False
+    for i in range(mat1._rows):
+        for j in range(mat1._cols):
+            if mat1[(i,j)] != mat2[(i,j)]:
+                return False
+    return True
+
+def is_aprox_eqal(mat1,mat2,e=1e-5):
+    if mat1._rows!=mat2._rows:
+        return False
+    if mat1._cols!=mat2._cols:
+        return False
+    for i in range(mat1._rows):
+        for j in range(mat1._cols):
+            if abs(mat1[(i,j)]-mat2[(i,j)])>e:
+                return False
+    return True
 
 
 
